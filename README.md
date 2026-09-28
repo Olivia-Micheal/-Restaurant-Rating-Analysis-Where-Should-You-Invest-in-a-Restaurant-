@@ -40,7 +40,9 @@ The client asked four specific questions:
 
 Put simply, the four questions ask: who are the customers, what do they want, where is the gap in the market, and what should an investor look for.
 
-**Figure 1: Digitaley Drive project brief**
+<img width="733" height="1280" alt="photo_2026-09-28_10-55-42" src="https://github.com/user-attachments/assets/56de67e1-17ca-49e3-80f6-4e05a3c73ae6" />
+
+*Figure 1: Digitaley Drive project brief*
 
 ---
 
@@ -131,7 +133,9 @@ The dataset has five tables. The ratings cover 138 consumers, 130 restaurants, a
 | Preference_Match | Ratings | Shows Match when the consumer's preferred cuisine is one of the cuisines the restaurant serves, and No Match when it is not |
 | Demand_Supply_Gap | Cuisines | Number of consumers who prefer a cuisine minus the number of restaurants that serve it |
 
-**Figure 2: Raw dataset sample**
+<img width="1912" height="1020" alt="raw rating dataset" src="https://github.com/user-attachments/assets/3e1bac80-8652-4f69-9c97-dc599faaf1ed" />
+
+*Figure 2: Raw dataset sample*
 
 ---
 
@@ -168,7 +172,9 @@ Primary keys and foreign keys were added in PostgreSQL. This means the database 
 | demand_supply_gap | Cuisine demand counts and cuisine supply counts, side by side | Demand and supply charts (Pages 1, 3, and 4) and part of the Best Investment Cuisine measure (Page 5) |
 | restaurant_primary_cuisine | One cuisine for each restaurant | Feeds the primary cuisine column in core_analysis |
 
-**Figure 3: Table relationships (ER diagram)**
+<img width="1917" height="1012" alt="EDR sample rating" src="https://github.com/user-attachments/assets/92af1d77-5033-49b7-95c8-66677ad7e294" />
+
+*Figure 3: Table relationships sample (ER diagram)*
 
 ---
 
@@ -243,7 +249,24 @@ All cleaning was done in PostgreSQL. **The original data was never cleaned direc
 
 Every missing value was in an opinion or lifestyle field, such as smoker, marital status, occupation, or budget. There is no correct value to fill in for these. Filling them with the most common answer would push the demographic charts toward that answer and hide the truth. Labeling them Unknown keeps the data honest, and Unknown then shows up in the charts as its own small group. Zip_Code was not used in any part of the analysis, so its missing values had no effect.
 
-**Figure 4: SQL data cleaning and view creation**
+<img width="1920" height="1002" alt="sql table creation rating" src="https://github.com/user-attachments/assets/f0c3ac37-fa71-4bbc-9320-a4c01fd7eb47" />
+
+*Figure 4: SQL data cleaning and table creation*
+
+
+<img width="1920" height="995" alt="rating data claeaing" src="https://github.com/user-attachments/assets/c45c9ecb-9b50-470d-a7c3-2b133cbf2247" />
+
+*Figure 4: SQL data cleaning sample*
+
+
+<img width="1920" height="1021" alt="rating sql view" src="https://github.com/user-attachments/assets/80fdf30b-d73b-4b92-a1db-4671a1158587" />
+
+*Figure 4: SQL data cleaning and view creation*
+
+
+<img width="1920" height="1025" alt="sql view rating" src="https://github.com/user-attachments/assets/9d5da83f-7622-49a0-9a94-32ab0a196c51" />
+
+*Figure 4: SQL data cleaning and view creation*
 
 ---
 
@@ -263,7 +286,9 @@ Each measure was built to support a specific client question.
 
 **Important note:** the consumer charts (age, occupation, budget, and location) count **distinct consumers**, not ratings. This matters because one consumer can rate many restaurants. Counting ratings would make the same person appear many times and inflate the numbers.
 
-**Figure 5: DAX measures in Power BI**
+<img width="630" height="1031" alt="kpi rating" src="https://github.com/user-attachments/assets/f19a5baf-8e77-4ae1-a99f-f25a924b6ec3" />
+
+*Figure 5: DAX measures in Power BI*
 
 ---
 
@@ -280,7 +305,9 @@ The dashboard has five pages. A live link is not available, so please see [How t
 
 This page gives a quick summary of the whole dataset before going into detail on the other pages.
 
-**Figure 6: Overview dashboard page**
+<img width="1532" height="715" alt="rating 1" src="https://github.com/user-attachments/assets/4e76df47-cd2b-4167-abb0-bd201fc21a00" />
+
+*Figure 6: Overview dashboard page*
 
 The dataset covers 138 consumers and 130 restaurants across 101 cuisine types, with an average overall rating of 1.20. Most consumers are young and mostly students, and Mexican is by far the most preferred cuisine, with 97 consumers choosing it compared to 11 for American, the next closest. The following pages break down who these customers are, what affects their ratings, where the biggest market gap is, and what to look for when investing in a restaurant.
 
@@ -290,7 +317,9 @@ The dataset covers 138 consumers and 130 restaurants across 101 cuisine types, w
 
 **Client Question:** What are the consumer demographics? Does this indicate a bias in the data sample?
 
-**Figure 7: Consumer demographic dashboard page**
+<img width="1531" height="713" alt="Rating 2" src="https://github.com/user-attachments/assets/6eee1b8f-8550-47c4-8c82-3b0d14bcc7e7" />
+
+*Figure 7: Consumer demographic dashboard page*
 
 Yes, the data shows a clear bias. Most consumers are between 18 and 25 years old, mostly students, and fall under the Medium budget category. They are also concentrated in a few cities, mainly San Luis Potosi, with much smaller numbers from Ciudad Victoria, Cuernavaca, and Jiutepec. This means the data does not fully represent all restaurant customers in Mexico. It mainly reflects young, student, budget-conscious consumers from a narrow set of cities, and this should be considered when using this data to make decisions.
 
@@ -300,7 +329,9 @@ Yes, the data shows a clear bias. Most consumers are between 18 and 25 years old
 
 **Client Question:** What can you learn from the highest rated restaurants? Do consumer preferences have an effect on ratings?
 
-**Figure 8: Consumer preferences and restaurant performance dashboard page**
+<img width="1565" height="717" alt="rating 3" src="https://github.com/user-attachments/assets/1d8910a1-acb5-4eaf-94f0-29513f8fedb0" />
+
+*Figure 8: Consumer preferences and restaurant performance dashboard page*
 
 The highest rated restaurants, Emilianos, Michiko, and Las Mananitas, all scored 2.0, and most of them fall under Brewery and Contemporary cuisine types, not Mexican, which is the most demanded. Interestingly, getting a customer's preferred cuisine does not improve their rating. Restaurants that matched a customer's preference scored 1.11 on average, while restaurants that did not match scored higher at 1.22. Also, only 18.9% of visits actually matched a customer's preferred cuisine. This shows that customer satisfaction is not really about getting their favorite food type. Something else, like food quality or service, likely plays a bigger role.
 
@@ -312,7 +343,9 @@ Note: this page uses "Cuisine" to describe what a restaurant actually serves, wh
 
 **Client Question:** Are there any demand and supply gaps that can be exploited in the market?
 
-**Figure 9: Market opportunity dashboard page**
+<img width="1562" height="712" alt="rating 4" src="https://github.com/user-attachments/assets/7ef73e41-1484-4e6b-816a-fce860824e96" />
+
+*Figure 9: Market opportunity dashboard page*
 
 Yes, there is a clear gap worth exploiting. Mexican cuisine has the highest demand, with 97 consumers wanting it, but only 28 restaurants currently serve it. This leaves a gap of 69, which is much higher than every other cuisine, where the gap is usually around 6 or 7. This makes Mexican cuisine the biggest and clearest opportunity in this market.
 
@@ -322,7 +355,9 @@ Yes, there is a clear gap worth exploiting. Mexican cuisine has the highest dema
 
 **Client Question:** If you were to invest in a restaurant, which characteristics would you be looking for?
 
-**Figure 10: Investment characteristics dashboard page**
+<img width="1568" height="717" alt="rating 5" src="https://github.com/user-attachments/assets/ce1033a3-c00e-47a0-a3f3-2f626438c9b7" />
+
+*Figure 10: Investment characteristics dashboard page*
 
 The data shows that higher priced restaurants tend to perform better. High priced restaurants scored 1.26 compared to 1.07 for low priced ones. Restaurants with a full bar scored higher than those with no alcohol service, and restaurants with valet parking scored higher than those with public parking. Family cuisine came out as the best overall investment option because it balances both rating and market opportunity, even though Brewery rated higher on its own but lacks enough demand. Based on this, the best restaurant to invest in would be a high priced, Family cuisine restaurant with full bar service and valet parking, targeting employed customers.
 
