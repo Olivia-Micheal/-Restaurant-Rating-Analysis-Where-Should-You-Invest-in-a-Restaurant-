@@ -1,33 +1,29 @@
-# Restaurant Rating Analysis: Where Should You Invest in a Restaurant ?
-A data analytics project that uses a real Mexican restaurant rating dataset to help entrepreneurs and investors make informed decisions on where and what to invest in within the restaurant industry.
-
----
+# Restaurant Rating Analysis: Where Should You Invest in a Restaurant?
 
 ## Description
 
-This project analyzes a restaurant rating dataset from Mexico using PostgreSQL for data cleaning and modeling, and Power BI for visualization and storytelling. The goal was to answer four business questions given by a client and turn raw survey data into clear, actionable investment insights.
+Imagine you have money to invest in a restaurant business, but you do not know which cuisine to pick, which features to go for, or whether customer taste really affects how they rate a restaurant. This project answers those questions using a real restaurant rating survey from Mexico.
 
----
-
-Imagine you have money to invest in a restaurant business, but you do not know which cuisine to pick, which city to focus on, or what features actually make customers happy. This project answers that exact problem using real customer and restaurant data, so the decision is backed by numbers, not guesswork.
+The data was cleaned and modeled in PostgreSQL, then turned into a five page interactive dashboard in Power BI. The dashboard answers four business questions from the client and gives clear, data backed direction on where and what to invest in.
 
 ---
 
 ## Table of Contents
 
-1. Business Problem and Client Overview
-2. Dataset Description
-3. Data Model and Table Relationships
-4. Tools and Technologies
-5. Skills Explored
-6. Data Cleaning Process
-7. DAX Measures
-8. Dashboard Pages
-9. Key Findings
-10. Summary and Conclusion
-11. Recommendations
-12. Caveats and Limitations
-13. About Me and Contact
+1. [Business Problem and Client Overview](#1-business-problem-and-client-overview)
+2. [Dataset Description](#2-dataset-description)
+3. [Data Model and Table Relationships](#3-data-model-and-table-relationships)
+4. [Tools and Technologies](#4-tools-and-technologies)
+5. [Skills Explored](#5-skills-explored)
+6. [Data Cleaning Process](#6-data-cleaning-process)
+7. [DAX Measures](#7-dax-measures)
+8. [Dashboard Pages](#8-dashboard-pages)
+9. [Key Findings](#9-key-findings)
+10. [Summary and Conclusion](#10-summary-and-conclusion)
+11. [Recommendations](#11-recommendations)
+12. [Caveats and Limitations](#12-caveats-and-limitations)
+13. [How to Explore This Project](#13-how-to-explore-this-project)
+14. [About Me and Contact](#14-about-me-and-contact)
 
 ---
 
@@ -42,94 +38,249 @@ The client asked four specific questions:
 3. Are there any demand and supply gaps that can be exploited in the market?
 4. If you were to invest in a restaurant, which characteristics would you be looking for?
 
+Put simply, the four questions ask: who are the customers, what do they want, where is the gap in the market, and what should an investor look for.
+
 **Figure 1: Digitaley Drive project brief**
 
 ---
 
 ## 2. Dataset Description
 
-The dataset is made up of five related tables:
+The dataset comes from a customer survey carried out in Mexico in 2012. It covers two sides of the restaurant market: the customers (who they are and which cuisines they prefer) and the restaurants (what they offer). A ratings table connects the two sides by recording how each consumer rated the restaurants they visited.
 
-- **Consumers**: Consumer_ID, City, State, Country, Latitude, Longitude, Smoker, Drink_Level, Transportation_Method, Marital_Status, Children, Age, Occupation, Budget
-- **Consumer_Preferences**: Consumer_ID, Preferred_Cuisine
-- **Restaurants**: Restaurant_ID, Name, City, State, Country, Zip_Code, Latitude, Longitude, Alcohol_Service, Smoking_Allowed, Price, Franchise, Area, Parking
-- **Restaurants_Cuisines**: Restaurant_ID, Cuisine
-- **Ratings**: Consumer_ID, Restaurant_ID, Overall_Rating, Food_Rating, Service_Rating
+The dataset has five tables. The ratings cover 138 consumers, 130 restaurants, and 1,161 individual ratings. All three rating columns use a scale from 0 to 2, where 2 is the best.
 
-Consumers and Restaurants each represent one side of the market, the customer side and the business side. Ratings is the table that connects both sides together, since it is the only table holding both a Consumer_ID and a Restaurant_ID.
+| Table | What it contains | Side of the market |
+|---|---|---|
+| Consumers | Profile of each consumer, such as age, occupation, budget, and location | Customer |
+| Consumer_Preferences | The cuisines each consumer says they prefer. One consumer can have more than one | Customer |
+| Restaurants | Location and features of each restaurant, such as price, parking, and alcohol service | Restaurant |
+| Restaurants_Cuisines | The cuisines each restaurant serves. One restaurant can serve more than one | Restaurant |
+| Ratings | The scores each consumer gave to each restaurant they visited | Links both sides |
+
+### Data Dictionary
+
+**Consumers**
+
+| Column | Description |
+|---|---|
+| Consumer_ID | Unique ID for each consumer |
+| City | City where the consumer lives |
+| State | State where the consumer lives |
+| Country | Country where the consumer lives |
+| Latitude | Latitude of the consumer's location |
+| Longitude | Longitude of the consumer's location |
+| Smoker | Whether the consumer smokes |
+| Drink_Level | How much alcohol the consumer drinks |
+| Transportation_Method | How the consumer usually gets around, for example public transport or a personal car |
+| Marital_Status | Marital status of the consumer |
+| Children | Whether the consumer has children or dependents |
+| Age | Age of the consumer in years |
+| Occupation | Main occupation of the consumer, for example student or employed |
+| Budget | Spending level of the consumer: Low, Medium, or High |
+
+**Consumer_Preferences**
+
+| Column | Description |
+|---|---|
+| Consumer_ID | The consumer this preference belongs to |
+| Preferred_Cuisine | A cuisine the consumer says they prefer. One consumer can have several |
+
+**Restaurants**
+
+| Column | Description |
+|---|---|
+| Restaurant_ID | Unique ID for each restaurant |
+| Name | Name of the restaurant |
+| City | City where the restaurant is located |
+| State | State where the restaurant is located |
+| Country | Country where the restaurant is located |
+| Zip_Code | Postal code of the restaurant |
+| Latitude | Latitude of the restaurant's location |
+| Longitude | Longitude of the restaurant's location |
+| Alcohol_Service | Type of alcohol served, for example Full Bar, Wine & Beer, or None |
+| Smoking_Allowed | Smoking policy of the restaurant |
+| Price | Price level of the restaurant: Low, Medium, or High |
+| Franchise | Whether the restaurant is part of a franchise (Yes or No) |
+| Area | Type of restaurant space, for example open or closed |
+| Parking | Parking option, for example Valet, Public, Yes, or None |
+
+**Restaurants_Cuisines**
+
+| Column | Description |
+|---|---|
+| Restaurant_ID | The restaurant this cuisine belongs to |
+| Cuisine | A cuisine the restaurant serves. One restaurant can serve several |
+
+**Ratings**
+
+| Column | Description |
+|---|---|
+| Consumer_ID | The consumer who gave the rating |
+| Restaurant_ID | The restaurant that was rated |
+| Overall_Rating | Overall score, from 0 to 2 |
+| Food_Rating | Score for the food, from 0 to 2 |
+| Service_Rating | Score for the service, from 0 to 2 |
+
+**Columns added during the analysis**
+
+| Column | Where it was added | What it does |
+|---|---|---|
+| Age_Group | Consumers | Groups age into 18-25, 26-35, 36-45, and 46+ |
+| Primary_Cuisine | Restaurants | Gives each restaurant one cuisine (the first one in alphabetical order), so cuisine level ratings can be compared without repeating rating rows |
+| Preference_Match | Ratings | Shows Match when the consumer's preferred cuisine is one of the cuisines the restaurant serves, and No Match when it is not |
+| Demand_Supply_Gap | Cuisines | Number of consumers who prefer a cuisine minus the number of restaurants that serve it |
+
+**Figure 2: Raw dataset sample**
 
 ---
 
 ## 3. Data Model and Table Relationships
 
-The five tables were connected using Consumer_ID and Restaurant_ID as the shared keys. Consumers link to Consumer_Preferences and to Ratings through Consumer_ID. Restaurants link to Restaurants_Cuisines and to Ratings through Restaurant_ID. Ratings sits in the middle as the table that brings both sides of the market together.
+The data follows a simple star style model. Ratings is the center table, because it is the only table that holds both a Consumer_ID and a Restaurant_ID. Consumers and Restaurants sit on either side of it, and each one has an extra table for the cuisines linked to it.
 
-Since one consumer can have more than one preferred cuisine, and one restaurant can serve more than one cuisine, care was taken during the SQL stage to avoid duplicate rows when these tables were joined.
+```mermaid
+erDiagram
+    CONSUMERS ||--o{ CONSUMER_PREFERENCES : "has"
+    CONSUMERS ||--o{ RATINGS : "gives"
+    RESTAURANTS ||--o{ RESTAURANTS_CUISINES : "serves"
+    RESTAURANTS ||--o{ RATINGS : "receives"
+```
 
-**Figure 2: Data model and table relationships**
+| From table | To table | Joined on | Relationship |
+|---|---|---|---|
+| Consumers | Consumer_Preferences | Consumer_ID | One to many |
+| Consumers | Ratings | Consumer_ID | One to many |
+| Restaurants | Restaurants_Cuisines | Restaurant_ID | One to many |
+| Restaurants | Ratings | Restaurant_ID | One to many |
+
+Primary keys and foreign keys were added in PostgreSQL. This means the database itself blocks any rating that points to a consumer or restaurant that does not exist.
+
+**Two design decisions that are worth knowing:**
+
+1. **All joins were done in SQL, not in Power BI.** The tables were combined into ready made views in PostgreSQL and then loaded into Power BI. Because of this, the views in Power BI are not linked to each other, and this is on purpose. Each view already holds everything the pages using it need.
+2. **Many to many relationships were handled with care.** A consumer can prefer several cuisines, and a restaurant can serve several cuisines. Joining both directly to the ratings table would repeat the same rating many times and give wrong averages. To avoid this, the preference match was checked with an EXISTS test, so one rating always stays as one row. Each restaurant was also given one primary cuisine for cuisine level rating charts. After each view was built, its row count was compared with the ratings table to prove that no rows were duplicated.
+
+| View | What it combines | Used for |
+|---|---|---|
+| core_analysis | Ratings, Consumers, Restaurants, and each restaurant's primary cuisine | Consumer profile, ratings, and restaurant feature charts (Pages 1, 2, 3, and 5) |
+| preference_match_analysis | Ratings with a Match or No Match flag | Preference match KPIs and chart (Page 3) |
+| demand_supply_gap | Cuisine demand counts and cuisine supply counts, side by side | Demand and supply charts (Pages 1, 3, and 4) and part of the Best Investment Cuisine measure (Page 5) |
+| restaurant_primary_cuisine | One cuisine for each restaurant | Feeds the primary cuisine column in core_analysis |
+
+**Figure 3: Table relationships (ER diagram)**
 
 ---
 
 ## 4. Tools and Technologies
 
-- **PostgreSQL**: used for data cleaning, joins, and building analytical views
-- **Power BI**: used for data modeling, DAX measures, and dashboard visualization
-- **Excel**: used for a quick first look at the raw data before moving to SQL
+| Tool | What it was used for |
+|---|---|
+| PostgreSQL and pgAdmin | Data cleaning, constraints, joins, and building views |
+| Power BI Desktop | Data modeling, visuals, slicers, and page navigation |
+| DAX | Measures for KPIs, rankings, and comparisons |
+| Microsoft Excel | A quick first look at the raw files before moving to SQL |
+| PowerPoint | Wireframe and layout design, including the navigation bar, before building in Power BI |
+| Flaticon | Icons for the KPI cards and navigation bar |
+| Color Picker | Picking and matching colors so the dashboard theme stays consistent |
+| GitHub | Project documentation |
 
 ---
 
 ## 5. Skills Explored
 
-- Data cleaning and validation using SQL
-- Handling many to many relationships without causing data duplication
-- Writing SQL views to prepare clean data for reporting
-- Writing DAX measures for KPIs and comparisons
-- Dashboard design and data storytelling
-- Translating a business brief into a working analytics solution
+**Technical skills**
+
+- Data cleaning and validation in SQL: null values, duplicates, orphan records, inconsistent text, and invalid values
+- Database design with primary keys, foreign keys, and table relationships
+- Writing SQL views and calculated columns
+- Handling many to many relationships without duplicating rows
+- Creating backups before changing data
+- Writing DAX measures for KPIs, rankings, and comparisons
+- Using distinct counts so that numbers are not inflated
+
+**Analytical skills**
+
+- Turning business questions into a step by step analysis plan
+- Checking a data sample for bias
+- Comparing demand against supply to find market gaps
+- Testing results and fixing errors, for example fixing a measure that returned the same value for both Match and No Match
+
+**Design and communication skills**
+
+- Wireframing a dashboard layout in PowerPoint before building it
+- Dashboard design: color theme, icons, consistent titles, slicers, and page navigation
+- Writing insights in plain language for a non technical client
+- Documenting a project clearly on GitHub
 
 ---
 
 ## 6. Data Cleaning Process
 
-The data cleaning process followed these steps:
+All cleaning was done in PostgreSQL. **The original data was never cleaned directly.** The steps below were followed in order.
 
-1. Backup copies of all five tables were created before any cleaning started.
-2. Each table was checked for null values, duplicate rows, character inconsistencies such as spacing and inconsistent capitalization, orphan records, and unrealistic values.
-3. Every issue found was corrected. Missing values in the Consumers table, such as Occupation and Budget, were labeled as "Unknown" instead of being guessed, since these are opinion based fields with no correct value to assume.
-4. The same checks were run again after cleaning to confirm every issue was resolved.
-5. Primary key and foreign key constraints were added to enforce proper relationships between the tables.
-6. Calculated columns were added, including Age Group and Rating Category.
-7. Since a restaurant can serve more than one cuisine, a separate view was created to assign one primary cuisine to each restaurant. This made it possible to analyze cuisine level ratings without duplicating rating rows.
-8. Three main views were built to feed Power BI: one core view combining consumer, restaurant, and rating data, one view checking whether a customer's preferred cuisine matched the restaurant they visited, and one view comparing cuisine demand against cuisine supply.
+1. **Backup first.** A copy of all five tables was created before any cleaning started, so the original data could always be restored.
+2. **Investigate before fixing.** Every table was checked for **null values, duplicate rows, character inconsistencies** (extra spaces and capital letters), **orphan records** (ratings that point to a consumer or restaurant that does not exist), and **invalid values** such as unrealistic ages or ratings outside the scale.
+3. **Record the findings, then fix them.** Nothing was changed until every issue was written down.
+4. **Check again.** The same checks were run after the fixes to confirm that every issue was gone.
+5. **Verify data types.** Age and ratings were confirmed as whole numbers, coordinates as decimals, and ID columns were confirmed to have the same type in every table that uses them.
+6. **Add primary and foreign keys.** This was done only after the data was clean, since the keys would fail on bad records.
+7. **Test the relationships.** Sample joins across all five tables were run to confirm they link correctly.
+8. **Add calculated columns and views.** Age_Group, Primary_Cuisine, Preference_Match, and Demand_Supply_Gap were created, then the three views were built for Power BI.
+9. **Verify every view.** The row count of each view was compared with the ratings table to confirm that no rows were duplicated.
 
-**Figure 3: SQL data cleaning and view creation**
+**What the checks found**
+
+| Check | What was found | Action taken |
+|---|---|---|
+| Null values | **Consumers:** Smoker (3), Transportation_Method (7), Marital_Status (4), Children (11), Occupation (7), Budget (7). **Restaurants:** Zip_Code (20). The other three tables had none | Labeled as **Unknown** |
+| Duplicate rows | None found | No action needed |
+| Character inconsistencies | None found | No action needed |
+| Orphan records | None found. The foreign keys were added with no errors | No action needed |
+| Data types | Correct, and matching across tables | No action needed |
+
+**Why missing values were labeled "Unknown" and not guessed**
+
+Every missing value was in an opinion or lifestyle field, such as smoker, marital status, occupation, or budget. There is no correct value to fill in for these. Filling them with the most common answer would push the demographic charts toward that answer and hide the truth. Labeling them Unknown keeps the data honest, and Unknown then shows up in the charts as its own small group. Zip_Code was not used in any part of the analysis, so its missing values had no effect.
+
+**Figure 4: SQL data cleaning and view creation**
 
 ---
 
 ## 7. DAX Measures
 
-DAX measures were built to directly support each client question.
+Each measure was built to support a specific client question.
 
-- **Total Consumers, Total Restaurants, Average Overall Rating, Total Cuisine Types**: used to give a quick summary of the dataset on the Overview page.
-- **Average Age, Most Common Occupation, Most Common Budget**: used to describe who the consumers actually are, which supports the bias question in Question 2.
-- **Average Rating by Cuisine Match Status**: built specifically to test whether getting a preferred cuisine actually improves a customer's rating, which directly answers Question 1.
-- **Highest Demand Cuisine, Most Available Cuisine, Largest Gap Cuisine, Gap Size**: built to measure the difference between what customers want and what restaurants supply, which directly answers Question 3.
-- **Best Investment Cuisine**: this measure was built to combine both average rating and market gap together, instead of using rating alone. This was intentional, since a good investment decision should not be based on quality alone or demand alone, but both at once. This directly answers Question 4.
-- **Best Price Category, Target Customer**: built to identify which restaurant features and which customer segment are linked to higher ratings.
+| Page | Measure | Why it was chosen |
+|---|---|---|
+| Overview | Total Consumers, Total Restaurants, Average Overall Rating, Total Cuisine Types, Most Preferred Cuisine | Gives the client a quick picture of the size of the market before any detail |
+| Consumers (Q2) | Average Age, Most Common Occupation, Most Common Budget | Describes who the consumers really are, which is needed to judge bias in the sample |
+| Preferences (Q1) | Highest Rated Restaurant | Shows which restaurant is on top. If two restaurants tie, the one with more ratings wins |
+| Preferences (Q1) | Average Rating (Matched Cuisine), Cuisine Match Rate (%) | Tests whether getting a preferred cuisine improves ratings, and shows how often it even happens |
+| Opportunity (Q3) | Highest Demand Cuisine, Most Available Cuisine, Largest Gap Cuisine, Largest Gap Value | Measures the difference between what customers want and what restaurants supply |
+| Investment (Q4) | Best Investment Cuisine | Ranks every cuisine twice, once by average rating and once by market gap, then adds the two ranks together. The cuisine with the lowest total wins. This makes sure the pick is good on both quality and opportunity, not just one |
+| Investment (Q4) | Best Price Category, Target Customer | Shows which price level and which type of customer are linked to the highest ratings |
 
-**Figure 4: Power BI model view and DAX measures**
+**Important note:** the consumer charts (age, occupation, budget, and location) count **distinct consumers**, not ratings. This matters because one consumer can rate many restaurants. Counting ratings would make the same person appear many times and inflate the numbers.
+
+**Figure 5: DAX measures in Power BI**
 
 ---
 
 ## 8. Dashboard Pages
 
-This dashboard was built in Power BI Desktop. A live published link is not available, since that requires an active Power BI Pro license. The full interactive file (.pbix) is included in this repository. Download it and open it in Power BI Desktop, which is free to install, to explore the dashboard yourself, including all filters and slicers. Static screenshots of every page are provided below for quick viewing.
+The dashboard has five pages. A live link is not available, so please see [How to Explore This Project](#13-how-to-explore-this-project) to download and open the file. Screenshots of every page are shown below.
+
+**A note on repeated charts:** a few charts appear on more than one page. This is on purpose, since the same data answers different questions on different pages.
+
+- **Consumer Demand by Cuisine Type** appears on Pages 1, 3, and 4. On Page 1 it is part of the overview. On Page 3 it shows what customers want next to how restaurants perform. On Page 4 it is the demand side of the demand and supply comparison.
+- **Consumer Distribution by Budget Level** appears on Pages 1 and 2. On Page 1 it is part of the overview. On Page 2 it is used to check for bias in the sample.
 
 ### Page 1: Overview
 
-This page gives a quick summary of the entire dataset before going into detail on the other pages.
+This page gives a quick summary of the whole dataset before going into detail on the other pages.
 
-**Figure 5: Overview dashboard page**
+**Figure 6: Overview dashboard page**
 
 The dataset covers 138 consumers and 130 restaurants across 101 cuisine types, with an average overall rating of 1.20. Most consumers are young and mostly students, and Mexican is by far the most preferred cuisine, with 97 consumers choosing it compared to 11 for American, the next closest. The following pages break down who these customers are, what affects their ratings, where the biggest market gap is, and what to look for when investing in a restaurant.
 
@@ -139,7 +290,7 @@ The dataset covers 138 consumers and 130 restaurants across 101 cuisine types, w
 
 **Client Question:** What are the consumer demographics? Does this indicate a bias in the data sample?
 
-**Figure 6: Consumer demographic dashboard page**
+**Figure 7: Consumer demographic dashboard page**
 
 Yes, the data shows a clear bias. Most consumers are between 18 and 25 years old, mostly students, and fall under the Medium budget category. They are also concentrated in a few cities, mainly San Luis Potosi, with much smaller numbers from Ciudad Victoria, Cuernavaca, and Jiutepec. This means the data does not fully represent all restaurant customers in Mexico. It mainly reflects young, student, budget-conscious consumers from a narrow set of cities, and this should be considered when using this data to make decisions.
 
@@ -149,7 +300,7 @@ Yes, the data shows a clear bias. Most consumers are between 18 and 25 years old
 
 **Client Question:** What can you learn from the highest rated restaurants? Do consumer preferences have an effect on ratings?
 
-**Figure 7: Consumer preferences and restaurant performance dashboard page**
+**Figure 8: Consumer preferences and restaurant performance dashboard page**
 
 The highest rated restaurants, Emilianos, Michiko, and Las Mananitas, all scored 2.0, and most of them fall under Brewery and Contemporary cuisine types, not Mexican, which is the most demanded. Interestingly, getting a customer's preferred cuisine does not improve their rating. Restaurants that matched a customer's preference scored 1.11 on average, while restaurants that did not match scored higher at 1.22. Also, only 18.9% of visits actually matched a customer's preferred cuisine. This shows that customer satisfaction is not really about getting their favorite food type. Something else, like food quality or service, likely plays a bigger role.
 
@@ -161,7 +312,7 @@ Note: this page uses "Cuisine" to describe what a restaurant actually serves, wh
 
 **Client Question:** Are there any demand and supply gaps that can be exploited in the market?
 
-**Figure 8: Market opportunity dashboard page**
+**Figure 9: Market opportunity dashboard page**
 
 Yes, there is a clear gap worth exploiting. Mexican cuisine has the highest demand, with 97 consumers wanting it, but only 28 restaurants currently serve it. This leaves a gap of 69, which is much higher than every other cuisine, where the gap is usually around 6 or 7. This makes Mexican cuisine the biggest and clearest opportunity in this market.
 
@@ -171,7 +322,7 @@ Yes, there is a clear gap worth exploiting. Mexican cuisine has the highest dema
 
 **Client Question:** If you were to invest in a restaurant, which characteristics would you be looking for?
 
-**Figure 9: Investment characteristics dashboard page**
+**Figure 10: Investment characteristics dashboard page**
 
 The data shows that higher priced restaurants tend to perform better. High priced restaurants scored 1.26 compared to 1.07 for low priced ones. Restaurants with a full bar scored higher than those with no alcohol service, and restaurants with valet parking scored higher than those with public parking. Family cuisine came out as the best overall investment option because it balances both rating and market opportunity, even though Brewery rated higher on its own but lacks enough demand. Based on this, the best restaurant to invest in would be a high priced, Family cuisine restaurant with full bar service and valet parking, targeting employed customers.
 
@@ -208,15 +359,39 @@ This project set out to answer four questions using a restaurant rating dataset 
 ## 12. Caveats and Limitations
 
 - The consumer sample is not representative of the general population. It leans heavily toward young, student, budget-conscious consumers in a small number of cities.
-- The cuisine analysis on some pages is based on each restaurant's primary listed cuisine, since some restaurants serve more than one cuisine.
+- Cuisine analysis is based on each restaurant's primary cuisine, which is the first one in alphabetical order. Some restaurants serve more than one cuisine, so this is a simplification.
+- Most differences in average rating are small, since ratings are on a short scale from 0 to 2. For example, High priced restaurants (1.26) and Medium priced restaurants (1.25) score almost the same. The clearest gap is between these two and Low priced restaurants (1.07).
+- The Target Customer finding is based on occupation only, and employed consumers are a small group in the sample (16 of 138). It should be treated as a direction to test, not as proof.
 - The dataset was collected in 2012, so consumer behavior and market conditions may have changed since then.
 
 ---
 
-## 13. About Me and Contact
+## 13. How to Explore This Project
+
+A live link is not available, because publishing a Power BI report online needs a Power BI license. The project is shared as a downloadable file instead. Follow these steps to explore it yourself:
+
+1. **Download the Power BI file (.pbix)** from this repository. Click the file, then click the download button. You can also download the whole repository using Code, then Download ZIP.
+2. **Install Power BI Desktop for free** from the Microsoft website or the Microsoft Store. It runs on Windows.
+3. **Open the .pbix file.** The data is already inside the file, so no database setup is needed.
+4. **Move between pages** using the navigation bar on the left: Overview, Consumers, Preferences, Opportunity, and Investment.
+5. **Filter the data** using the slicers on the left side of each page:
+   - Overview: Consumer City and Consumer State
+   - Consumers: Consumer City, Occupation, and Budget
+   - Preferences: Primary Cuisine and Price
+   - Opportunity: no slicers, on purpose, so the full market gap stays visible
+   - Investment: Consumer City, Primary Cuisine, and Price
+6. **Hover over any chart** to see the exact values.
+
+Please do not click Refresh. The file was built from a local PostgreSQL database that is not available online, so refreshing will show an error.
+
+The original dataset files are also included in this repository if you want to check the raw data.
+
+---
+
+## 14. About Me and Contact
 
 Olivia Anetoh is a self-taught data analyst skilled in SQL, Power BI, and Excel, with a focus on turning raw business data into clear, actionable insights.
 
-- LinkedIn: https://www.linkedin.com/in/olivia-anetoh-955b94328
-- GitHub: https://github.com/Olivia-Micheal
-- Email: anetohchinecherem@gmail.com
+- LinkedIn: [Olivia Anetoh](https://www.linkedin.com/in/olivia-anetoh-955b94328)
+- GitHub: [Olivia-Micheal](https://github.com/Olivia-Micheal)
+- Email: [anetohchinecherem@gmail.com](mailto:anetohchinecherem@gmail.com)
