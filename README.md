@@ -10,20 +10,20 @@ The data was cleaned and modeled in PostgreSQL, then turned into a five page int
 
 ## Table of Contents
 
-1. [Business Problem and Client Overview](#1-business-problem-and-client-overview)
-2. [Dataset Description](#2-dataset-description)
-3. [Data Model and Table Relationships](#3-data-model-and-table-relationships)
-4. [Tools and Technologies](#4-tools-and-technologies)
-5. [Skills Explored](#5-skills-explored)
-6. [Data Cleaning Process](#6-data-cleaning-process)
-7. [DAX Measures](#7-dax-measures)
-8. [Dashboard Pages](#8-dashboard-pages)
-9. [Key Findings](#9-key-findings)
-10. [Summary and Conclusion](#10-summary-and-conclusion)
-11. [Recommendations](#11-recommendations)
-12. [Caveats and Limitations](#12-caveats-and-limitations)
-13. [How to Explore This Project](#13-how-to-explore-this-project)
-14. [About Me and Contact](#14-about-me-and-contact)
+1. [Business Problem and Client Overview](#business-problem)
+2. [Dataset Description](#dataset-description)
+3. [Data Model and Table Relationships](#data-model)
+4. [Tools and Technologies](#tools)
+5. [Skills Explored](#skills)
+6. [Data Cleaning Process](#data-cleaning)
+7. [DAX Measures](#dax-measures)
+8. [Dashboard Pages](#dashboard-pages)
+9. [Key Findings](#key-findings)
+10. [Summary and Conclusion](#summary)
+11. [Recommendations](#recommendations)
+12. [Caveats and Limitations](#caveats)
+13. [How to Explore This Project](#how-to-explore)
+14. [About Me and Contact](#about-me)
 
 ---
 
